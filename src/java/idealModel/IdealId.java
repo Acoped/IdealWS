@@ -5,7 +5,7 @@
  */
 package idealModel;
 
-import idealWS.IdealWS;
+import idealWS.checkStudent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -35,7 +35,7 @@ public class IdealId {
             }
         } 
         catch (SQLException ex) {
-            Logger.getLogger(IdealWS.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(checkStudent.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
