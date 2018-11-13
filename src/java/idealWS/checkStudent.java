@@ -5,7 +5,10 @@
  */
 package idealWS;
 
+
+import idealModel.EnrollCode;
 import idealModel.IdealId;
+import javax.json.JsonArray;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -14,7 +17,11 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * REST Web Service
@@ -41,11 +48,16 @@ public class checkStudent {
     @GET
     @Path("checkStudent/{ideal}/{courseCode}/{semesterCode}")
     @Produces(MediaType.APPLICATION_JSON)
-    public IdealId checkStudent(@PathParam("ideal") String ideal, 
+    public EnrollCode checkStudent(@PathParam("ideal") String ideal, 
                                 @PathParam("courseCode") String courseCode, 
                                 @PathParam("semesterCode") String semesterCode) {
-        IdealId idId = new IdealId(ideal,"LTU10004");
-        return idId;
+
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://localhost:8080/ParaplyetWS/api/getEnrollCode/I0019N/VT18");
+        EnrollCode ec = target.request(MediaType.APPLICATION_JSON).get(EnrollCode.class);
+
+        //IdealId idId = new IdealId(ideal,"LTU10004");
+        return ec;
     }
 
     /**
