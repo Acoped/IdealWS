@@ -53,6 +53,7 @@ public class checkStudent {
                                 @PathParam("courseCode") String courseCode, 
                                 @PathParam("semesterCode") String semesterCode) {
 
+        // Client call to ParaplyetWS to get EnrollCode.
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("http://localhost:8080/ParaplyetWS/api/getEnrollCode/"
                 + courseCode
@@ -60,8 +61,11 @@ public class checkStudent {
                 + semesterCode);
         EnrollCode ec = target.request(MediaType.APPLICATION_JSON).get(EnrollCode.class);
         
+        // TODO Refactor to a Boolean.
+        // Checks if ideal and enrollCode exists in same row returns id if so, else 999.
         IdealId idId = new IdealId(ideal,ec.getEnrollCode());
         
+        // Wrapper class packing ideal and enrollCode in a class to return from this API.
         ReplyWrapper rw = new ReplyWrapper();
         rw.setEnrollCode(ec.getEnrollCode());
         if (idId.getId() != 999)  { 
@@ -75,12 +79,5 @@ public class checkStudent {
         return rw;
     }
 
-    /**
-     * PUT method for updating or creating an instance of checkStudent
-     * @param content representation for the resource
-     */
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void putJson(String content) {
-    }
+
 }

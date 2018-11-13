@@ -20,6 +20,7 @@ public class IdealId {
     
     private IdealId(){}
     
+    //check if there is a pk (id) for the ideal and enrollecode combo in database.
     public IdealId(String ideal, String enrollCode)    {
         DbConnection db = new DbConnection();
         setId(999);
