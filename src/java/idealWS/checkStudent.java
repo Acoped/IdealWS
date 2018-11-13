@@ -8,6 +8,7 @@ package idealWS;
 
 import idealModel.EnrollCode;
 import idealModel.IdealId;
+import idealModel.ReplyWrapper;
 import javax.json.JsonArray;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -48,16 +49,30 @@ public class checkStudent {
     @GET
     @Path("checkStudent/{ideal}/{courseCode}/{semesterCode}")
     @Produces(MediaType.APPLICATION_JSON)
-    public EnrollCode checkStudent(@PathParam("ideal") String ideal, 
+    public ReplyWrapper checkStudent(@PathParam("ideal") String ideal, 
                                 @PathParam("courseCode") String courseCode, 
                                 @PathParam("semesterCode") String semesterCode) {
 
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://localhost:8080/ParaplyetWS/api/getEnrollCode/I0019N/VT18");
+        WebTarget target = client.target("http://localhost:8080/ParaplyetWS/api/getEnrollCode/"
+                + courseCode
+                + "/"
+                + semesterCode);
         EnrollCode ec = target.request(MediaType.APPLICATION_JSON).get(EnrollCode.class);
-
-        //IdealId idId = new IdealId(ideal,"LTU10004");
-        return ec;
+        
+        IdealId idId = new IdealId(ideal,ec.getEnrollCode());
+        
+        ReplyWrapper rw = new ReplyWrapper();
+        rw.setEnrollCode(ec.getEnrollCode());
+        if (idId.getId() != 999)  { 
+            rw.setIdeal(ideal);
+        }
+        else {
+            rw.setEnrollCode("Student not Registred");
+            rw.setIdeal(ideal);
+        } 
+        
+        return rw;
     }
 
     /**
